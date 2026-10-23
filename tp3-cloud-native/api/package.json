@@ -1,0 +1,8 @@
+{
+  "name": "globallogistics-envios",
+  "version": "1.0.0",
+  "description": "Servicio de Envios (minimo) para TP3 - Arquitectura de Sistemas 2026",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "license": "MIT"
+}
