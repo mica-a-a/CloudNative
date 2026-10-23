@@ -14,7 +14,7 @@ services:
           cpus: "0.50"      # tope por réplica: hace reproducible la saturación en cualquier PC
           memory: 128M
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
       interval: 5s
       timeout: 2s
       retries: 3
