@@ -3,6 +3,7 @@
 // Sin dependencias externas: solo el módulo http nativo de Node.js
 const http = require('http');
 const os = require('os');
+const { randomUUID } = require('crypto');
 
 const PORT = process.env.PORT || 3000;
 const HOSTNAME = os.hostname(); // dentro de Docker = ID corto del contenedor
@@ -29,7 +30,7 @@ const server = http.createServer((req, res) => {
     }
     req.resume(); // descartar el cuerpo
     return req.on('end', () => send(res, 201, {
-      idEnvio: 'ENV-' + Date.now() + '-' + process.pid,
+      idEnvio: 'ENV-' + randomUUID(),
       estado: 'CREADO',
       hostname: HOSTNAME,
     }));

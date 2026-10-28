@@ -1,0 +1,1 @@
+17:22:40 Active connections: 22  server accepts handled requests  3525 3525 3501  Reading: 0 Writing: 1 Waiting: 21  

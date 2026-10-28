@@ -19,9 +19,9 @@ Despliegue real de los nodos diseñados en el TP2 para "GlobalLogistics S.A.": *
 ## Ejecutar el entorno (un solo comando)
 Requisito: Docker con Compose. Nada más (la imagen de la API se construye sola).
 ```bash
-git clone <URL-DEL-REPO> && cd tp3-cloud-native
-docker-compose up -d          # equivalente: docker compose up -d
-docker-compose ps             # 3 contenedores api (healthy) + 1 nginx
+git clone https://github.com/mica-a-a/CloudNative.git && cd CloudNative/tp3-cloud-native
+docker compose up -d           # equivalente: docker-compose up -d
+docker compose ps             # 3 contenedores api (healthy) + 1 nginx
 ```
 
 ## Verificar el balanceo
@@ -29,15 +29,17 @@ Peticiones consecutivas deben responder con **distintos hostnames** (= ID del co
 ```bash
 for i in $(seq 1 9); do curl -s http://localhost/; echo; done
 for i in $(seq 1 9); do curl -si http://localhost/ | grep -i x-served-by; done
-docker-compose logs nginx | tail -n 20        # columna upstream= muestra la réplica que atendió
+for i in $(seq 1 30); do curl -s http://localhost/ | grep -o '"hostname":"[^"]*"'; done | sort | uniq -c   # reparto en 30 pedidos
+docker compose logs nginx | tail -n 20        # columna upstream= muestra la réplica que atendió
 ```
 
 ## Verificar el Health Check / resiliencia
 ```bash
 docker stop $(docker ps -q --filter "name=api" | head -n 1)     # se cae una réplica
 for i in $(seq 1 9); do curl -s http://localhost/ | grep -o '"hostname":"[^"]*"'; done
-docker-compose up -d --scale api=3 --no-recreate                 # se restaura
-docker-compose restart nginx                                     # re-resuelve las IP de las réplicas
+for i in $(seq 1 12); do curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" http://localhost/; done   # códigos y tiempos con la réplica caída
+docker compose up -d --scale api=3 --no-recreate                 # se restaura
+docker compose restart nginx                                     # re-resuelve las IP de las réplicas
 ```
 
 ## Reproducir las pruebas de carga
@@ -63,9 +65,14 @@ Observar en vivo (otra terminal): `docker stats` y `curl http://localhost/nginx-
 Sin `ab` instalado (alternativa, ejecuta ab dentro de la red de Compose):
 `docker run --rm --network <carpeta>_backend httpd:2.4-alpine ab -l -n 5000 -c 100 http://nginx/`
 
+## Entorno de las mediciones
+Las mediciones del informe se hicieron en una **MacBook** (macOS) con **Docker Desktop** (7,75 GiB de memoria para contenedores) y **Apache Benchmark 2.3 local** contra `http://localhost/` (un solo run por escenario). `ab`, NGINX y las réplicas comparten la misma máquina, así que los valores absolutos dependen del equipo.
+
+Capturas de evidencia (carpeta `evidencias/`, detalle en `evidencias/README.md`) y resultados crudos de `ab` en `evidencias/ab/` (copiar ahí `results/*.txt`, `results/*.csv` y `results/resumen.md` después de correr `./scripts/run_benchmarks.sh`).
+
 ## Bajar el entorno
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ## Decisiones de diseño
@@ -74,5 +81,5 @@ docker-compose down
 - **Límite de 0,5 CPU por réplica**: hace visible y reproducible la saturación en cualquier máquina.
 - **Health checks**: (1) `healthcheck` de Docker sobre `/health` (NGINX arranca cuando las réplicas están `healthy`); (2) health check **pasivo** en NGINX (`max_fails`/`fail_timeout` + `proxy_next_upstream`). El check activo es de NGINX Plus.
 - **Timeout de 2 s** en NGINX = timeout duro del gateway del TP2. NGINX no reintenta POST (el reintento es del cliente con la misma `Idempotency-Key`).
-- **Limitación conocida**: NGINX resuelve las IP de `api` al arrancar; si las réplicas se recrean, ejecutar `docker-compose restart nginx`.
+- **Limitación conocida**: NGINX resuelve las IP de `api` al arrancar; si las réplicas se recrean, ejecutar `docker compose restart nginx`.
 - **Imagen liviana**: `node:20-alpine`, sin dependencias npm, usuario no-root.

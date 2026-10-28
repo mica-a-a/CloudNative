@@ -1,0 +1,3 @@
+17:22:52 Active connections: 71  server accepts handled requests  8576 8576 8435  Reading: 0 Writing: 3 Waiting: 68  
+17:22:54 Active connections: 152  server accepts handled requests  11524 11524 11301  Reading: 0 Writing: 2 Waiting: 150  
+17:22:56 Active connections: 278  server accepts handled requests  14525 14525 14176  Reading: 0 Writing: 2 Waiting: 276  

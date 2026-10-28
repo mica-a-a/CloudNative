@@ -1,0 +1,16 @@
+17:23:08,tp3-cloud-native-nginx-1,49.68%,38.4MiB / 7.75GiB
+17:23:08,tp3-cloud-native-api-3,17.00%,104.1MiB / 128MiB
+17:23:08,tp3-cloud-native-api-1,7.39%,11.15MiB / 128MiB
+17:23:08,tp3-cloud-native-api-2,13.84%,11.03MiB / 128MiB
+17:23:10,tp3-cloud-native-nginx-1,48.84%,38.77MiB / 7.75GiB
+17:23:10,tp3-cloud-native-api-3,11.44%,105.7MiB / 128MiB
+17:23:10,tp3-cloud-native-api-1,11.64%,13.04MiB / 128MiB
+17:23:10,tp3-cloud-native-api-2,12.00%,12.47MiB / 128MiB
+17:23:12,tp3-cloud-native-nginx-1,49.65%,38.63MiB / 7.75GiB
+17:23:12,tp3-cloud-native-api-3,11.88%,105.4MiB / 128MiB
+17:23:12,tp3-cloud-native-api-1,11.84%,13.1MiB / 128MiB
+17:23:12,tp3-cloud-native-api-2,13.06%,12.41MiB / 128MiB
+17:23:14,tp3-cloud-native-nginx-1,0.29%,38.35MiB / 7.75GiB
+17:23:14,tp3-cloud-native-api-3,0.20%,105.5MiB / 128MiB
+17:23:14,tp3-cloud-native-api-1,0.01%,13.07MiB / 128MiB
+17:23:14,tp3-cloud-native-api-2,2.98%,13.15MiB / 128MiB
